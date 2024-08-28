@@ -11,6 +11,10 @@ from common.log import logger
 # 将所有可用的配置项写在字典里, 请使用小写字母
 # 此处的配置值无实际意义，程序不会读取此处的配置，仅用于提示格式，请将配置加入到config.json中
 available_setting = {
+    # groq api 配置
+    "groq_api_key": "",
+    "groq_api_url": "",
+    "toolhouse_api_key": "",
     # openai api配置
     "open_ai_api_key": "",  # openai api key
     # openai apibase，当use_azure_chatgpt为true时，需要设置对应的api base
@@ -150,7 +154,7 @@ available_setting = {
     "dingtalk_client_id": "",  # 钉钉机器人Client ID 
     "dingtalk_client_secret": "",  # 钉钉机器人Client Secret
     "dingtalk_card_enabled": False,
-    
+
     # chatgpt指令自定义触发词
     "clear_memory_commands": ["#清除记忆"],  # 重置会话指令，必须以#开头
     # channel配置
@@ -238,6 +242,9 @@ config = Config()
 
 
 def drag_sensitive(config):
+    """
+    隐藏敏感信息，如API-Key，中间部分用*代替
+    """
     try:
         if isinstance(config, str):
             conf_dict: dict = json.loads(config)
@@ -275,7 +282,9 @@ def load_config():
     config = Config(json.loads(config_str))
 
     # override config with environment variables.
-    # Some online deployment platforms (e.g. Railway) deploy project from github directly. So you shouldn't put your secrets like api key in a config file, instead use environment variables to override the default config.
+    # Some online deployment platforms (e.g. Railway) deploy project from GitHub directly.
+    # So you shouldn't put your secrets like api key in a config file,
+    # instead use environment variables to override the default config.
     for name, value in os.environ.items():
         name = name.lower()
         if name in available_setting:
