@@ -1,4 +1,5 @@
 # bot_type
+L_TUTOR = "l-tutor"
 OPEN_AI = "openAI"
 CHATGPT = "chatGPT"
 BAIDU = "baidu"  # 百度文心一言模型
