@@ -30,7 +30,7 @@ class ChatChannel(Channel):
 
     def __init__(self):
         _thread = threading.Thread(target=self.consume)
-        _thread.setDaemon(True)
+        _thread.daemon = True
         _thread.start()
 
     # 根据消息构造context，消息内容相关的触发项写在这里
@@ -178,7 +178,7 @@ class ChatChannel(Channel):
             # reply的发送步骤
             self._send_reply(context, reply)
 
-    def _generate_reply(self, context: Context, reply: Reply = Reply()) -> Reply:
+    def _generate_reply(self, context: Context, reply: Reply = Reply()) -> Reply | None:
         e_context = PluginManager().emit_event(
             EventContext(
                 Event.ON_HANDLE_CONTEXT,
