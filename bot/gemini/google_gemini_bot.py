@@ -27,6 +27,7 @@ class GoogleGeminiBot(Bot):
         self.model = conf().get("model") or "gemini-pro"
         if self.model == "gemini":
             self.model = "gemini-pro"
+
     def reply(self, query, context: Context = None) -> Reply:
         try:
             if context.type != ContextType.TEXT:
