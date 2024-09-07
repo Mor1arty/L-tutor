@@ -2,7 +2,7 @@
 
 import os
 import signal
-import sys
+import sys, os
 import time
 
 from channel import channel_factory
@@ -10,6 +10,9 @@ from common import const
 from config import load_config
 from plugins import *
 import threading
+
+
+os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 
 def sigterm_handler_wrap(_signo):
