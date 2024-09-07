@@ -56,7 +56,7 @@ def _check(func):
             return
         self.receivedMsgs[msgId] = True
         create_time = cmsg.create_time  # 消息时间戳
-        if conf().get("hot_reload") == True and int(create_time) < int(time.time()) - 60:  # 跳过1分钟前的历史消息
+        if conf().get("hot_reload") is True and int(create_time) < int(time.time()) - 60:  # 跳过1分钟前的历史消息
             logger.debug("[WX]history message {} skipped".format(msgId))
             return
         if cmsg.my_msg and not cmsg.is_group:
@@ -78,7 +78,7 @@ def qrCallback(uuid, status, qrcode):
 
             img = Image.open(io.BytesIO(qrcode))
             _thread = threading.Thread(target=img.show, args=("QRCode",))
-            _thread.setDaemon(True)
+            _thread.daemon = True
             _thread.start()
         except Exception as e:
             pass
@@ -193,7 +193,8 @@ class WechatChannel(ChatChannel):
             logger.debug("[WX]receive voice for group msg: {}".format(cmsg.content))
         elif cmsg.ctype == ContextType.IMAGE:
             logger.debug("[WX]receive image for group msg: {}".format(cmsg.content))
-        elif cmsg.ctype in [ContextType.JOIN_GROUP, ContextType.PATPAT, ContextType.ACCEPT_FRIEND, ContextType.EXIT_GROUP]:
+        elif cmsg.ctype in [ContextType.JOIN_GROUP, ContextType.PATPAT, ContextType.ACCEPT_FRIEND,
+                            ContextType.EXIT_GROUP]:
             logger.debug("[WX]receive note msg: {}".format(cmsg.content))
         elif cmsg.ctype == ContextType.TEXT:
             # logger.debug("[WX]receive group msg: {}, cmsg={}".format(json.dumps(cmsg._rawmsg, ensure_ascii=False), cmsg))
@@ -264,6 +265,7 @@ class WechatChannel(ChatChannel):
             itchat.send_video(video_storage, toUserName=receiver)
             logger.info("[WX] sendVideo url={}, receiver={}".format(video_url, receiver))
 
+
 def _send_login_success():
     try:
         from common.linkai_client import chat_client
@@ -289,4 +291,3 @@ def _send_qr_code(qrcode_list: list):
             chat_client.send_qrcode(qrcode_list)
     except Exception as e:
         pass
-
